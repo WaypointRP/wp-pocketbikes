@@ -47,6 +47,9 @@ RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItem)
     ClearPedTasks(ped)
     TaskPlayAnim(ped, animationDict, animation , 8.0, -8.0, -1, 0, 0, false, false, false)
 
+    -- Wait so the animation can play before immediately spawning the bike
+    Wait(500)
+
     -- Spawn the bike in the world with an offset in front of the player and set it on the ground
     local offsetCoords = GetOffsetFromEntityInWorldCoords(ped, 0.0, 1.0, 0.0)
     local bike = CreateVehicle(bikeModel, offsetCoords, GetEntityHeading(ped), true, false)
