@@ -71,7 +71,7 @@ end)
 RegisterNetEvent('wp-pocketbikes:client:pickup', function(data)
     local ped = PlayerPedId()
     local bikeEntity = data.entity
-    local bikeItem = data.itemName -- string.lower(GetDisplayNameFromVehicleModel(bikeEntityModelId))
+    local bikeItem = data.itemName
     
     if bikeEntity then
         local bikeEntityModelId = GetEntityModel(bikeEntity)
@@ -108,7 +108,7 @@ for _, bike in pairs(Config.Bikes) do
 
     -- A model can only have one set of options, so if the model is defined twice, only the last one will be used
     -- NOTE: If you have another script that adds target onto these bike models, this may conflict with it.
-    --  It can be resolved by combining the targetOptiolns and calling AddTargetModel one time (either in this script or the other one)
+    --  It can be resolved by combining the targetOptions and calling AddTargetModel one time (either in this script or the other one)
     AddTargetModel(bike, {
         options = targetOptions,
         distance = 2.0
