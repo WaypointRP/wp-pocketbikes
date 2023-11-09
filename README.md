@@ -2,6 +2,12 @@
 
 This is a simple script that adds bikes as an item, that when used places them into the world. The player can then ride the bike like normal and when done pick the bike back up and receive the item. 
 
+![image](https://github.com/WaypointRP/wp-pocketbikes/assets/18689469/a76a9792-d365-4ded-a8d8-7b7ff3bc3da3)
+
+
+![wp-pocketbike](https://github.com/WaypointRP/wp-pocketbikes/assets/18689469/656c17d6-213f-4bd2-ad4b-de1603f6ce99)
+
+
 ## Setup
 
 1. Enable the script in your server.cfg
