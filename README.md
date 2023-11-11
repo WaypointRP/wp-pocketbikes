@@ -34,7 +34,6 @@ When picking up a bike, all of the metadata (primaryColor, secondaryColor, pearl
 
 ## Dependencies
 - QBCore / ESX / Or other frameworks (must implement framework specific solutions in framework.lua)
-- QBCore / ESX / OX for Notifications
 
 ## Performance
 This script is very lightweight and has no impact on performance.
