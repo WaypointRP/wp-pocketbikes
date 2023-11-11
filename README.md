@@ -1,6 +1,8 @@
 # Waypoint Pocket Bikes
 
-This is a simple script that adds bikes as an item, that when used places them into the world. The player can then ride the bike like normal and when done pick the bike back up and receive the item. 
+This is a simple script that adds bikes as an item, that when used places them into the world. The player can then ride the bike like normal and when done pick the bike back up and receive the item.
+
+When picking up a bike, all of the metadata (primaryColor, secondaryColor, pearlescentColor, wheelColor, xenonColor) is saved to the item so that it can be placed back into the world with the same state it was in when picked up. 
 
 ![image](https://github.com/WaypointRP/wp-pocketbikes/assets/18689469/a76a9792-d365-4ded-a8d8-7b7ff3bc3da3)
 
@@ -30,6 +32,11 @@ This is a simple script that adds bikes as an item, that when used places them i
 ## Dependencies
 - QBCore / ESX / Or other frameworks (must implement framework specific solutions in framework.lua)
 - QBCore / ESX / OX for Notifications
+
+## Performance
+This script is very lightweight and has no impact on performance.
+
+Resouce monitor results: 0.0ms
 
 ## Credit
 Authored by: BackSH00TER - Waypoint Scripts
