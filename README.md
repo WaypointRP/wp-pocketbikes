@@ -1,13 +1,14 @@
 # Waypoint Pocket Bikes
 
+![wp-pocketbikes](https://github.com/WaypointRP/wp-pocketbikes/assets/18689469/b7ed3143-870b-4ad3-b091-f8f4f655b66e)
+
 This is a simple script that adds bikes as an item, that when used places them into the world. The player can then ride the bike like normal and when done pick the bike back up and receive the item.
 
 When picking up a bike, all of the metadata (primaryColor, secondaryColor, pearlescentColor, wheelColor, xenonColor) is saved to the item so that it can be placed back into the world with the same state it was in when picked up. 
 
-![image](https://github.com/WaypointRP/wp-pocketbikes/assets/18689469/a76a9792-d365-4ded-a8d8-7b7ff3bc3da3)
-
-
 ![wp-pocketbike](https://github.com/WaypointRP/wp-pocketbikes/assets/18689469/656c17d6-213f-4bd2-ad4b-de1603f6ce99)
+
+![image](https://github.com/WaypointRP/wp-pocketbikes/assets/18689469/a76a9792-d365-4ded-a8d8-7b7ff3bc3da3)
 
 
 ## Setup
@@ -28,6 +29,8 @@ When picking up a bike, all of the metadata (primaryColor, secondaryColor, pearl
     ```
 
 4. Add the images from `images/` to your inventory script images folder
+
+5. Add a way for players to acquire bikes, whether that be a bike shop that sells the items or a vehicle store is up to you.
 
 ## Dependencies
 - QBCore / ESX / Or other frameworks (must implement framework specific solutions in framework.lua)
