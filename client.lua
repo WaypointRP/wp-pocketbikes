@@ -33,6 +33,52 @@ local function RequestNetworkControlOfObject(netId, itemEntity)
     end
 end
 
+-- Returns a table containing the metadata for the given bike entity
+---@param bikeEntity - The entity of the bike to get the metadata for
+---@return table - The metadata of the bike {plate, colorPrimary, colorSecondary, pearlescentColor, wheelColor, xenonColor}
+local function getBikeMetadata(bikeEntity)
+    local bikePlate = GetVehicleNumberPlateText(bikeEntity)
+    local colorPrimary, colorSecondary = GetVehicleColours(bikeEntity)
+    local pearlescentColor, wheelColor = GetVehicleExtraColours(bikeEntity)
+    local xenonColor = GetVehicleXenonLightsColour(bikeEntity)
+
+    return {
+        plate = bikePlate,
+        colorPrimary = colorPrimary,
+        colorSecondary = colorSecondary,
+        pearlescentColor = pearlescentColor,
+        wheelColor = wheelColor,
+        xenonColor = xenonColor,
+    }
+end
+
+-- Sets the bike properties based on the given metadata
+---@param bike - The bike entity to set the properties on
+---@param bikeMetadata - The metadata of the bike {plate, colorPrimary, colorSecondary, pearlescentColor, wheelColor, xenonColor}
+local function setBikeProperties(bike, bikeMetadata)
+    local plate = bikeMetadata.plate
+    local colorPrimary = bikeMetadata.colorPrimary
+    local colorSecondary = bikeMetadata.colorSecondary
+    local pearlescentColor = bikeMetadata.pearlescentColor
+    local wheelColor = bikeMetadata.wheelColor
+    local xenonColor = bikeMetadata.xenonColor
+
+    -- If the bike item info already has a plate, use that otherwise create a new plate. This is important to handle owned bikes.
+    if not bikePlate then
+        bikePlate = "BICYCLE".. math.random(1000, 9999)
+    end
+    SetVehicleNumberPlateText(bike, bikePlate)
+
+    SetVehicleColours(bike, colorPrimary, colorSecondary)
+    SetVehicleExtraColours(bike, pearlescentColor, wheelColor)
+
+    -- Xenon color is 0-12 if set or 255 if no color set
+    if xenonColor ~= 255 then
+        ToggleVehicleMod(bike, 22, true)
+        SetVehicleXenonLightsColour(bike, xenonColor)
+    end
+end
+
 -- Handles creating and placing the bike in the world
 -- Adds a plate to the bike (either from the item metadata or a random plate) and sets the player as the owner/gives keys
 ---@param bikeModel string The model of the bike to spawn
@@ -57,17 +103,16 @@ RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItem)
 
     TriggerServerEvent("wp-pocketbikes:server:RemoveItem", bikeModel)
 
-    -- If the bike item info already has a plate, use that otherwise create a new plate. This is important to handle owned bikes.
-    if not bikePlate then
-        bikePlate = "BICYCLE".. math.random(1000, 9999)
-    end
-    SetVehicleNumberPlateText(bike, bikePlate)
+    setBikeProperties(bike, bikeItem.info)
     
     SetModelAsNoLongerNeeded(bikeModel)
 
     SetPlayerAsOwnerOfVehicleWithPlate(bikePlate)
 end)
 
+-- Handles picking up the bike and giving the player the item back
+-- Applies metadata onto the item to store the plate and color
+---@param data table The data of the bike entity to pick up provided from the target event
 RegisterNetEvent('wp-pocketbikes:client:pickup', function(data)
     local ped = PlayerPedId()
     local bikeEntity = data.entity
@@ -75,15 +120,15 @@ RegisterNetEvent('wp-pocketbikes:client:pickup', function(data)
     
     if bikeEntity then
         local bikeEntityModelId = GetEntityModel(bikeEntity)
-        local bikePlate = GetVehicleNumberPlateText(bikeEntity)
         local bikeNetId = NetworkGetNetworkIdFromEntity(bikeEntity)
+        local bikeMetadata = getBikeMetadata(bikeEntity)
 
         LoadAnimationDict(animationDict)
 
         ClearPedTasks(ped)
         TaskPlayAnim(ped, animationDict, animation , 8.0, -8.0, -1, 0, 0, false, false, false)
 
-        TriggerServerEvent("wp-pocketbikes:server:AddItem", bikeItem, {plate = bikePlate})
+        TriggerServerEvent("wp-pocketbikes:server:AddItem", bikeItem, bikeMetadata)
 
         -- Must have network control of entity before being able to delete it
         RequestNetworkControlOfObject(bikeNetId, bikeEntity)
