@@ -54,8 +54,10 @@ end
 
 -- Sets the bike properties based on the given metadata
 ---@param bike - The bike entity to set the properties on
----@param bikeMetadata - The metadata of the bike {plate, colorPrimary, colorSecondary, pearlescentColor, wheelColor, xenonColor}
+---@param bikeMetadata - The metadata of the bike {plate, colorPrimary, colorSecondary, pearlescentColor, wheelColor, xenonColor}, may be nil for frameworks that dont support item metadata (ex: ESX)
 local function setBikeProperties(bike, bikeMetadata)
+    if not bikeMetadata then return end
+
     local plate = bikeMetadata.plate
     local colorPrimary = bikeMetadata.colorPrimary
     local colorSecondary = bikeMetadata.colorSecondary
@@ -81,11 +83,11 @@ end
 
 -- Handles creating and placing the bike in the world
 -- Adds a plate to the bike (either from the item metadata or a random plate) and sets the player as the owner/gives keys
+-- bikeItem info may be nil for frameworks that don't support item metadata (ex: ESX)
 ---@param bikeModel string The model of the bike to spawn
 ---@param bikeItem table The item data of the bike to spawn
 RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItem)
     local ped = PlayerPedId()
-    local bikePlate = bikeItem.info.plate
 
     -- Request model and wait until its loaded
     LoadModel(bikeModel)
@@ -107,6 +109,10 @@ RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItem)
     
     SetModelAsNoLongerNeeded(bikeModel)
 
+    local bikePlate = GetVehicleNumberPlateText(bike)
+    if bikeItem.info then
+        bikePlate = bikeItem.info.plate
+    end
     SetPlayerAsOwnerOfVehicleWithPlate(bikePlate)
 end)
 
