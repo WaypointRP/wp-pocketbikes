@@ -42,3 +42,5 @@ Resouce monitor results: 0.0ms
 
 ## Credit
 Authored by: BackSH00TER - Waypoint Scripts
+
+@DonHulieo for providing insipiration and examples for structuring the framework.lua file.
