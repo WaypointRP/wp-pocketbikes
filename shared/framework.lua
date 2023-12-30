@@ -66,15 +66,21 @@ end
 
 -- Takes a prop model and the targetOptions and adds it to the target script so that this prop model is targetable
 ---@param model string The name of the prop model to target
----@param targetOptions table The options to pass to the target script
----        ex: options: { offset = { x = 0.0, y = 0.0, z = 0.0 }, rotation = { x = 0.0, y = 0.0, z = 0.0 } , animationDict = "", animationName = "" }
+---@param targetOptions table The options to pass to the target script 
+---        ex: targetOptions = { distance = num, options: { offset = { x = 0.0, y = 0.0, z = 0.0 }, rotation = { x = 0.0, y = 0.0, z = 0.0 } , animationDict = "", animationName = "" } }
 function AddTargetModel(modelName, targetOptions)
     if IsDuplicityVersion() then return end
     if Config.Target == 'qb' then
         exports['qb-target']:AddTargetModel(modelName, targetOptions)
+    elseif Config.Target == 'ox' then
+        -- ox target expects each option to have a distance on it,
+        -- Append the distance value to each option
+        for _, option in pairs(targetOptions.options) do
+            option.distance = targetOptions.distance
+        end
+        exports.ox_target:addModel(modelName, targetOptions.options)
     else
-        -- TODO: Implement support for other target scripts
-        print("ERROR: AddTargetModel is not yet implemented for this framework")
+        print('ERROR: AddTargetModel is not yet implemented for this framework')
     end
 end
 
@@ -106,27 +112,37 @@ function CreateUseableItem(...)
 end
 
 -- Adds item to the players inventory
-function AddItem(source, name, amount, itemInfo)
+---@param source number The source of the player
+---@param itemName string The name of the item to add
+---@param amount number The amount of the item to add
+function AddItem(source, itemName, amount)
     if not IsDuplicityVersion() then return end
-    if Config.Framework == 'esx' then
+    if Config.Inventory == 'esx' then
         local xPlayer = Core.GetPlayerFromId(source)
-        return xPlayer.addInventoryItem(name, amount)
-    elseif Config.Framework == 'qb' then
+        return xPlayer.addInventoryItem(itemName, amount)
+    elseif Config.Inventory == 'qb' then
         local Player = Core.Functions.GetPlayer(source)
-        TriggerClientEvent('inventory:client:ItemBox', source, Core.Shared.Items[name], "add")
-        return Player.Functions.AddItem(name, amount, nil, itemInfo) 
+        TriggerClientEvent('inventory:client:ItemBox', source, Core.Shared.Items[itemName], "add")
+        return Player.Functions.AddItem(itemName, amount) 
+    elseif Config.Inventory == 'ox' then
+        exports.ox_inventory:AddItem(source, itemName, amount)
     end
 end
 
 -- Removes item from the players inventory
-function RemoveItem(source, name, amount)
+---@param source number The source of the player
+---@param itemName string The name of the item to remove
+---@param amount number The number of items to remove
+function RemoveItem(source, itemName, amount)
     if not IsDuplicityVersion() then return end
-    if Config.Framework == 'esx' then
+    if Config.Inventory == 'esx' then
         local xPlayer = Core.GetPlayerFromId(source)
-        return xPlayer.removeInventoryItem(name, amount)
-    elseif Config.Framework == 'qb' then
+        return xPlayer.removeInventoryItem(itemName, amount)
+    elseif Config.Inventory == 'qb' then
         local Player = Core.Functions.GetPlayer(source)
-        TriggerClientEvent('inventory:client:ItemBox', source, Core.Shared.Items[name], "remove")
-        return Player.Functions.RemoveItem(name, amount)
+        TriggerClientEvent('inventory:client:ItemBox', source, Core.Shared.Items[itemName], "remove")
+        return Player.Functions.RemoveItem(itemName, amount)
+    elseif Config.Inventory == 'ox' then
+        exports.ox_inventory:RemoveItem(source, itemName, amount)
     end
 end
