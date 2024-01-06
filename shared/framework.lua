@@ -102,12 +102,21 @@ end
 
 --------------------- SERVER FUNCTIONS ---------------------
 
-function CreateUseableItem(...)
+-- Registers a useable item
+---@param itemName string The name of the item to register
+---@param callbackFn function The function to call when the item is used
+function CreateUseableItem(itemName, callbackFn)
     if not IsDuplicityVersion() then return end
     if Config.Framework == 'esx' then
-        return Core.RegisterUsableItem(...)
+        -- ESX returns the itemName as the second parameter, itemdata as the third parameter when calling the callback function
+        -- We are interested in the itemData for our callback
+        local function ESXCallback(source, itemName, itemData) 
+            callbackFn(source, itemData)
+        end
+
+        return Core.RegisterUsableItem(itemName, ESXCallback)
     elseif Config.Framework == 'qb' then
-        return Core.Functions.CreateUseableItem(...)
+        return Core.Functions.CreateUseableItem(itemName, callbackFn)
     end
 end
 
