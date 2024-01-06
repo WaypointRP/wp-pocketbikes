@@ -83,11 +83,12 @@ end
 
 -- Handles creating and placing the bike in the world
 -- Adds a plate to the bike (either from the item metadata or a random plate) and sets the player as the owner/gives keys
--- bikeItem info may be nil for frameworks that don't support item metadata (ex: ESX)
+-- bikeItemData info may be nil for frameworks that don't support item metadata (ex: ESX)
 ---@param bikeModel string The model of the bike to spawn
----@param bikeItem table The item data of the bike to spawn
-RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItem)
+---@param bikeItemData table The item data of the bike to spawn
+RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItemData)
     local ped = PlayerPedId()
+    local itemMetadata = GetItemMetadata(bikeItemData)
 
     -- Request model and wait until its loaded
     LoadModel(bikeModel)
@@ -105,13 +106,13 @@ RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItem)
 
     TriggerServerEvent("wp-pocketbikes:server:RemoveItem", bikeModel)
 
-    setBikeProperties(bike, bikeItem.info)
+    setBikeProperties(bike, itemMetadata)
     
     SetModelAsNoLongerNeeded(bikeModel)
 
     local bikePlate = GetVehicleNumberPlateText(bike)
-    if bikeItem.info then
-        bikePlate = bikeItem.info.plate
+    if itemMetadata then
+        bikePlate = itemMetadata.plate
     end
     SetPlayerAsOwnerOfVehicleWithPlate(bikePlate)
 end)
