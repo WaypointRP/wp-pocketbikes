@@ -86,6 +86,20 @@ end
 
 --------------------- CLIENT FUNCTIONS ---------------------
 
+-- Returns the item metadata
+---@param itemData table The item data from using the item
+---@return table The metadata of the item
+function GetItemMetadata(itemData) 
+    if Config.Inventory == 'esx' then
+        -- ESX inventory does not support metadata by default, recommended to use ox_inventory instead
+        print("GetItemMetadata is missing an implementation in the framework file for esx")
+    elseif Config.Inventory == 'qb' then
+        return itemData.info
+    elseif Config.Inventory == 'ox' then
+        return itemData.metadata
+    end
+end
+
 -- Gives the player keys and sets them as the "owner" of the vehicle
 ---@param plate string The plate of the vehicle to give keys to
 function SetPlayerAsOwnerOfVehicleWithPlate(plate)
@@ -124,7 +138,8 @@ end
 ---@param source number The source of the player
 ---@param itemName string The name of the item to add
 ---@param amount number The amount of the item to add
-function AddItem(source, itemName, amount)
+---@param info table Metadata to add to the item
+function AddItem(source, itemName, amount, info)
     if not IsDuplicityVersion() then return end
     if Config.Inventory == 'esx' then
         local xPlayer = Core.GetPlayerFromId(source)
@@ -132,9 +147,9 @@ function AddItem(source, itemName, amount)
     elseif Config.Inventory == 'qb' then
         local Player = Core.Functions.GetPlayer(source)
         TriggerClientEvent('inventory:client:ItemBox', source, Core.Shared.Items[itemName], "add")
-        return Player.Functions.AddItem(itemName, amount) 
+        return Player.Functions.AddItem(itemName, amount, nil, info) 
     elseif Config.Inventory == 'ox' then
-        exports.ox_inventory:AddItem(source, itemName, amount)
+        exports.ox_inventory:AddItem(source, itemName, amount, info)
     end
 end
 
