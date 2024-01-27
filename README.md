@@ -32,6 +32,8 @@ When picking up a bike, all of the metadata (primaryColor, secondaryColor, pearl
 
 5. Add a way for players to acquire bikes, whether that be a bike shop that sells the items or a vehicle store is up to you.
 
+> Note: If you are using `ox` for any of the Framework options you need to uncomment `@ox_lib/init.lua` in the fxmanifest.lua.
+
 ## Dependencies
 - QBCore / ESX / Or other frameworks (must implement framework specific solutions in framework.lua)
 
