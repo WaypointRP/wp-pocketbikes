@@ -1,7 +1,7 @@
 -- Setup all the bikes as useable items
 for _, v in pairs(Config.Bikes) do
     CreateUseableItem(v, function(source, item)
-        TriggerClientEvent('wp-pocketbikes:client:place', source, item.name, item)
+        TriggerClientEvent("wp-pocketbikes:client:place", source, item.name, item)
     end)
 end
 

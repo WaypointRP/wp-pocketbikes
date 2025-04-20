@@ -18,6 +18,9 @@ When picking up a bike, all of the metadata (primaryColor, secondaryColor, pearl
 2. Modify the `config.lua` to use the framework you are using
 
 3. Add these items to your items.lua:
+    <details>
+    <summary>Items (qb-inventory)</summary>
+
     ```lua
     bmx = {name = "bmx", label = "BMX Bike", weight = 500, type = "item", image = "bmx.png", unique = true, useable = true, shouldClose = true, combinable = nil, description = "A BMX bike"},
     cruiser = {name = "cruiser", label = "Cruiser Bike", weight = 500, type = "item", image = "cruiser.png", unique = true, useable = true, shouldClose = true, combinable = nil, description = "A Cruiser bike"},
@@ -27,6 +30,63 @@ When picking up a bike, all of the metadata (primaryColor, secondaryColor, pearl
     tribike2 = {name = "tribike2", label = "Red TriBike", weight = 500, type = "item", image = "tribike2.png", unique = true, useable = true, shouldClose = true, combinable = nil, description = "A red Tribike"},
     tribike3 = {name = "tribike3", label = "Blue TriBike", weight = 500, type = "item", image = "tribike3.png", unique = true, useable = true, shouldClose = true, combinable = nil, description = "A blue Tribike"},
     ```
+    </details>
+
+    <details>
+    <summary>Items (ox_inventory)</summary>
+
+    ```lua
+    ["bmx"] = {
+        label = "BMX Bike",
+        weight = 500,
+        stack = false,
+        close = true,
+        description = "A BMX bike",
+    },
+    ["cruiser"] = {
+        label = "Cruiser Bike",
+        weight = 500,
+        stack = false,
+        close = true,
+        description = "A Cruiser bike",
+    },
+    ["fixter"] = {
+        label = "Fixter Bike",
+        weight = 500,
+        stack = false,
+        close = true,
+        description = "A Fixter bike",
+    },
+    ["scorcher"] = {
+        label = "Scorcher Bike",
+        weight = 500,
+        stack = false,
+        close = true,
+        description = "A Scorcher bike",
+    },
+    ["tribike"] = {
+        label = "Yellow TriBike",
+        weight = 500,
+        stack = false,
+        close = true,
+        description = "A yellow Tribike",
+    },
+    ["tribike2"] = {
+        label = "Red TriBike",
+        weight = 500,
+        stack = false,
+        close = true,
+        description = "A red Tribike",
+    },
+    ["tribike3"] = {
+        label = "Blue TriBike",
+        weight = 500,
+        stack = false,
+        close = true,
+        description = "A blue Tribike",
+    },
+    ```
+    </details>
 
 4. Add the images from `images/` to your inventory script images folder
 
@@ -35,7 +95,7 @@ When picking up a bike, all of the metadata (primaryColor, secondaryColor, pearl
 > Note: If you are using `ox` for any of the Framework options you need to uncomment `@ox_lib/init.lua` in the fxmanifest.lua.
 
 ## Dependencies
-- QBCore / ESX / Or other frameworks (must implement framework specific solutions in framework.lua)
+- QBCore / Qbox / ESX / Or other frameworks (must implement framework specific solutions in framework.lua)
 
 ## Performance
 This script is very lightweight and has no impact on performance.
