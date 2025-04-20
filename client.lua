@@ -34,8 +34,8 @@ local function RequestNetworkControlOfObject(netId, itemEntity)
 end
 
 -- Returns a table containing the metadata for the given bike entity
----@param bikeEntity - The entity of the bike to get the metadata for
----@return table - The metadata of the bike {plate, colorPrimary, colorSecondary, pearlescentColor, wheelColor, xenonColor}
+--- @param bikeEntity - The entity of the bike to get the metadata for
+--- @return table - The metadata of the bike {plate, colorPrimary, colorSecondary, pearlescentColor, wheelColor, xenonColor}
 local function getBikeMetadata(bikeEntity)
     local bikePlate = GetVehicleNumberPlateText(bikeEntity)
     local colorPrimary, colorSecondary = GetVehicleColours(bikeEntity)
@@ -53,8 +53,8 @@ local function getBikeMetadata(bikeEntity)
 end
 
 -- Sets the bike properties based on the given metadata
----@param bike - The bike entity to set the properties on
----@param bikeMetadata - The metadata of the bike {plate, colorPrimary, colorSecondary, pearlescentColor, wheelColor, xenonColor}, may be nil for frameworks that dont support item metadata (ex: ESX)
+--- @param bike - The bike entity to set the properties on
+--- @param bikeMetadata - The metadata of the bike {plate, colorPrimary, colorSecondary, pearlescentColor, wheelColor, xenonColor}, may be nil for frameworks that dont support item metadata (ex: ESX)
 local function setBikeProperties(bike, bikeMetadata)
     if not bikeMetadata then return end
 
@@ -67,7 +67,7 @@ local function setBikeProperties(bike, bikeMetadata)
 
     -- If the bike item info already has a plate, use that otherwise create a new plate. This is important to handle owned bikes.
     if not bikePlate then
-        bikePlate = "BICYCLE".. math.random(1000, 9999)
+        bikePlate = "BICYCLE" .. math.random(1000, 9999)
     end
     SetVehicleNumberPlateText(bike, bikePlate)
 
@@ -84,9 +84,9 @@ end
 -- Handles creating and placing the bike in the world
 -- Adds a plate to the bike (either from the item metadata or a random plate) and sets the player as the owner/gives keys
 -- bikeItemData info may be nil for frameworks that don't support item metadata (ex: ESX)
----@param bikeModel string The model of the bike to spawn
----@param bikeItemData table The item data of the bike to spawn
-RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItemData)
+--- @param bikeModel string The model of the bike to spawn
+--- @param bikeItemData table The item data of the bike to spawn
+RegisterNetEvent("wp-pocketbikes:client:place", function(bikeModel, bikeItemData)
     local ped = PlayerPedId()
     local itemMetadata = GetItemMetadata(bikeItemData)
 
@@ -94,7 +94,7 @@ RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItemData
     LoadModel(bikeModel)
 
     ClearPedTasks(ped)
-    TaskPlayAnim(ped, animationDict, animation , 8.0, -8.0, -1, 0, 0, false, false, false)
+    TaskPlayAnim(ped, animationDict, animation, 8.0, -8.0, -1, 0, 0, false, false, false)
 
     -- Wait so the animation can play before immediately spawning the bike
     Wait(500)
@@ -107,7 +107,7 @@ RegisterNetEvent('wp-pocketbikes:client:place', function(bikeModel, bikeItemData
     TriggerServerEvent("wp-pocketbikes:server:RemoveItem", bikeModel)
 
     setBikeProperties(bike, itemMetadata)
-    
+
     SetModelAsNoLongerNeeded(bikeModel)
 
     local bikePlate = GetVehicleNumberPlateText(bike)
@@ -119,21 +119,20 @@ end)
 
 -- Handles picking up the bike and giving the player the item back
 -- Applies metadata onto the item to store the plate and color
----@param data table The data of the bike entity to pick up provided from the target event
-RegisterNetEvent('wp-pocketbikes:client:pickup', function(data)
+--- @param data table The data of the bike entity to pick up provided from the target event
+RegisterNetEvent("wp-pocketbikes:client:pickup", function(data)
     local ped = PlayerPedId()
     local bikeEntity = data.entity
     local bikeItem = data.itemName
-    
+
     if bikeEntity then
-        local bikeEntityModelId = GetEntityModel(bikeEntity)
         local bikeNetId = NetworkGetNetworkIdFromEntity(bikeEntity)
         local bikeMetadata = getBikeMetadata(bikeEntity)
 
         LoadAnimationDict(animationDict)
 
         ClearPedTasks(ped)
-        TaskPlayAnim(ped, animationDict, animation , 8.0, -8.0, -1, 0, 0, false, false, false)
+        TaskPlayAnim(ped, animationDict, animation, 8.0, -8.0, -1, 0, 0, false, false, false)
 
         TriggerServerEvent("wp-pocketbikes:server:AddItem", bikeItem, bikeMetadata)
 
@@ -150,7 +149,7 @@ end)
 for _, bike in pairs(Config.Bikes) do
     local targetOptions = {
         {
-            type = 'client',
+            type = "client",
             event = "wp-pocketbikes:client:pickup",
             icon = "fas fa-bicycle",
             label = "Pick up bike",
@@ -163,6 +162,6 @@ for _, bike in pairs(Config.Bikes) do
     --  It can be resolved by combining the targetOptions and calling AddTargetModel one time (either in this script or the other one)
     AddTargetModel(bike, {
         options = targetOptions,
-        distance = 2.0
+        distance = 2.0,
     })
 end
