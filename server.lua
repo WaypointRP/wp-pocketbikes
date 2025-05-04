@@ -14,3 +14,12 @@ RegisterNetEvent("wp-pocketbikes:server:AddItem", function(itemName, itemInfo)
     local src = source
     AddItem(src, itemName, 1, itemInfo)
 end)
+
+AddEventHandler("onResourceStart", function(resourceName)
+    if resourceName == GetCurrentResourceName() then
+        -- Give the script some time to start
+        Wait(100)
+
+        ValidateOxLibUsage()
+    end
+end)
